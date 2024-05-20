@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.scale(dpr, dpr); // Scale the context to maintain high resolution
 
     // Set the font style for the numbers
-    ctx.font = "16px Times New Roman";
+    ctx.font = "20px Times New Roman";
     
     class Bit {
         static bits = [];
@@ -17,11 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         constructor() {
             do {
-                this.x = Math.floor(Math.random() * (canvas.width + 35));
+                this.x = Math.floor(Math.random() * (canvas.width  + canvas.width / (Bit.minDistance / 2))) ;
                 this.y = -30;
             } while (this.isTooClose()); // Keep picking coordinates until it's not too close to another bit
 
-            this.value = Math.floor(Math.random() * 10); // Correct range from 0 to 9
+            this.value = Math.floor(Math.random() * 2); // Correct range from 0 to 9
             Bit.bits.push(this);
         }
 
@@ -39,12 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         clear() {
-            ctx.clearRect(this.x, this.y - 16, 8.5, 16); // Clear a smaller area around the number
+            ctx.clearRect(this.x, this.y - Bit.minDistance, (Bit.minDistance / 2), Bit.minDistance); // Clear a smaller area around the number
         }
 
         applyGravity() {
             this.clear();
-            if (this.y <= canvas.height + 54.5) {
+            if (this.y <= canvas.height + (canvas.height / (Bit.minDistance / 4))) {
                 this.y += World.gravity; // Increment the y position
                 this.render();
             } else {
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     class World {
-        static gravity = 2; // Increase gravity for a faster falling effect
+        static gravity = 3; // Increase gravity for a faster falling effect
         constructor() {
             setInterval(() => this.addGravity(), 16); // Execute more frequently for smoother animation
         }
@@ -66,8 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     function spawnBits() {
-        if (Bit.bits.length < 210) { // Check to prevent overpopulation
-            for (let i = 0; i < 5; i++) {
+        if (Bit.bits.length < 2000) { // Check to prevent overpopulation
+            for (let i = 0; i < 10; i++) {
                 new Bit().render();
             }
         }
